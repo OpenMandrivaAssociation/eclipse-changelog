@@ -5,7 +5,7 @@ Epoch: 1
 
 Name:           eclipse-changelog
 Version:        2.5.1
-Release:        %mkrel 0.2.1
+Release:        %mkrel 0.2.2
 Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
