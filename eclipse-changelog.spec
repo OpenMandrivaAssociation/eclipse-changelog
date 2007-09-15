@@ -5,7 +5,7 @@ Epoch: 1
 
 Name:           eclipse-changelog
 Version:        2.5.1
-Release:        %mkrel 0.2.2
+Release:        %mkrel 0.2.3
 Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
@@ -39,8 +39,6 @@ BuildRequires:          eclipse-cdt >= 1:4.0.0
 BuildRequires:          eclipse-cvs-client >= 1:3.3.0
 %if %{gcj_support}
 BuildRequires:          java-gcj-compat-devel
-Requires(post):         java-gcj-compat
-Requires(postun):       java-gcj-compat
 %else
 BuildRequires:          java-devel >= 0:1.4.2
 %endif
