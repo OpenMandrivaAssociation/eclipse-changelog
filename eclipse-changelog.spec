@@ -32,7 +32,6 @@ URL:            http://sources.redhat.com/eclipse
 
 Source0:        http://sourceware.org/eclipse/changelog/%{name}-src-%{version}.zip
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires:          eclipse-pde >= 1:3.3.0
 BuildRequires:          eclipse-cdt >= 1:4.0.0
