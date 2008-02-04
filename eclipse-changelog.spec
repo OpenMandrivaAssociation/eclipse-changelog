@@ -43,6 +43,7 @@ BuildRequires:          eclipse-pde >= 1:3.3.0
 BuildRequires:          eclipse-cdt >= 1:4.0.0
 BuildRequires:          eclipse-cvs-client >= 1:3.3.0
 BuildRequires:          java-rpmbuild
+BuildRequires:          zip
 %if %{gcj_support}
 BuildRequires:          java-gcj-compat-devel
 %else
