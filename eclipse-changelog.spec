@@ -9,6 +9,7 @@ Release:        %mkrel 0.3.1
 Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:        Eclipse Public License 
 URL:            http://sources.redhat.com/eclipse
 
