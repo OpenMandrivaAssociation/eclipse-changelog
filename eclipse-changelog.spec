@@ -1,11 +1,11 @@
 Epoch: 1
 
-%define gcj_support     1
-%define eclipse_base    %{_datadir}/eclipse
+%define gcj_support     0
+%define eclipse_base    %{_libdir}/eclipse
 
 Name:           eclipse-changelog
-Version:        2.6.1
-Release:        %mkrel 0.3.1
+Version:        2.6.2
+Release:        %mkrel 0.2.1
 Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
@@ -21,8 +21,8 @@ Provides:       eclipse-changelog-jdt = %{epoch}:%{version}-%{release}
 
 # This tarball was generated like so:
 #
-# mkdir eclipse-changelog-src-2.6.1
-# cd eclipse-changelog-src-2.6.1
+# mkdir eclipse-changelog-src-2.6.2
+# cd eclipse-changelog-src-2.6.2
 # for f in \
 # org.eclipse.linuxtools.changelog.core \
 # org.eclipse.linuxtools.changelog.doc \
@@ -31,14 +31,11 @@ Provides:       eclipse-changelog-jdt = %{epoch}:%{version}-%{release}
 # org.eclipse.linuxtools.changelog-feature \
 # do \
 #  svn export \
-#  svn://anonymous@dev.eclipse.org/svnroot/technology/org.eclipse.linuxtools/changelog/tags/R2_6_1/$f;
+#  svn://anonymous@dev.eclipse.org/svnroot/technology/org.eclipse.linuxtools/changelog/tags/R2_6_2/$f;
 # done
-# zip -r eclipse-changelog-src-2.6.1.zip *
+# zip -r eclipse-changelog-src-2.6.2.zip *
 
 Source0:        http://sourceware.org/eclipse/changelog/%{name}-src-%{version}.zip
-
-# Patch required to 2.6.1 sources to fix a number of problems
-Patch1: %{name}-2.6.1.patch
 
 BuildRequires:          eclipse-pde >= 1:3.3.0
 BuildRequires:          eclipse-cdt >= 1:4.0.0
@@ -60,7 +57,6 @@ ExclusiveArch: %{ix86} x86_64 ppc ia64
 %endif
 
 Requires:               eclipse-platform >= 1:3.3.0
-Requires:               eclipse-cvs-client >= 1:3.3.0
 
 %description
 The Eclipse ChangeLog package contains Eclipse features and plugins that are
@@ -70,40 +66,18 @@ entries containing function or method names.
 
 %prep
 %setup -q -c -n eclipse-changelog-%{version}
-%patch1 -p0
 
 %build
-# See comments in the script to understand this.
-/bin/sh -x %{_datadir}/eclipse/buildscripts/copy-platform SDK %{eclipse_base} cdt
-SDK=$(cd SDK > /dev/null && pwd)
-
-# Eclipse may try to write to the home directory.
-mkdir home
-homedir=$(cd home > /dev/null && pwd)
-
-# build the main ChangeLog feature
-%{java} -cp $SDK/startup.jar                              \
-     -Dosgi.sharedConfiguration.area=%{_libdir}/eclipse/configuration  \
-     org.eclipse.core.launcher.Main                    \
-     -application org.eclipse.ant.core.antRunner       \
-     -Duser.home=$homedir                              \
-     -application org.eclipse.ant.core.antRunner       \
-     -Dtype=feature                                    \
-     -Did=org.eclipse.linuxtools.changelog                 \
-     -DsourceDirectory=$(pwd)                          \
-     -DbaseLocation=$SDK                               \
-     -Dbuilder=%{eclipse_base}/plugins/org.eclipse.pde.build/templates/package-build  \
-     -f %{eclipse_base}/plugins/org.eclipse.pde.build/scripts/build.xml
+%{eclipse_base}/buildscripts/pdebuild -d cdt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d -m 755 $RPM_BUILD_ROOT%{eclipse_base}
-unzip -q -d $RPM_BUILD_ROOT%{eclipse_base}/.. \
+installDir=$RPM_BUILD_ROOT/%{eclipse_base}/dropins/changelog
+install -d -m 755 $installDir
+unzip -q -d $installDir \
  build/rpmBuild/org.eclipse.linuxtools.changelog.zip
 
-%if %{gcj_support}
-%{_bindir}/aot-compile-rpm
-%endif
+%{gcj_compile}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -118,15 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%{eclipse_base}/features/org.eclipse.linuxtools.changelog_*
-%{eclipse_base}/plugins/org.eclipse.linuxtools.changelog.core_*
-%{eclipse_base}/plugins/org.eclipse.linuxtools.changelog.cparser_*
-%{eclipse_base}/plugins/org.eclipse.linuxtools.changelog.parsers.java_*
-%{eclipse_base}/plugins/org.eclipse.linuxtools.changelog.doc_*
-%doc %{eclipse_base}/features/org.eclipse.linuxtools.changelog_*/epl-v10.html
-%if %{gcj_support}
-%dir %{_libdir}/gcj/%{name}
-%{_libdir}/gcj/%{name}/org.eclipse.linuxtools.changelog.core_*
-%{_libdir}/gcj/%{name}/org.eclipse.linuxtools.changelog.cparser_*
-%{_libdir}/gcj/%{name}/org.eclipse.linuxtools.changelog.parsers.java_*
-%endif
+%doc org.eclipse.linuxtools.changelog-feature/epl-v10.html
+%{eclipse_base}/dropins/changelog
+%{gcj_files}
+
