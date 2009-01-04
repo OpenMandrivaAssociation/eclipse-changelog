@@ -4,13 +4,13 @@ Epoch: 1
 %define eclipse_base    %{_libdir}/eclipse
 
 Name:           eclipse-changelog
-Version:        2.6.2
-Release:        %mkrel 0.2.1
+Version:        2.6.4
+Release:        %mkrel 0.1.0
 Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-License:        Eclipse Public License 
+License:        Eclipse Public License
 URL:            http://sources.redhat.com/eclipse
 
 Obsoletes:      eclipse-changelog-cdt < %{epoch}:%{version}-%{release}
@@ -48,7 +48,7 @@ BuildRequires:          java-gcj-compat-devel
 BuildRequires:          java-devel >= 0:1.4.2
 %endif
 
-# These plugins are really noarch but they need cdt which 
+# These plugins are really noarch but they need cdt which
 # we only build on these architectures.
 %if %{gcj_support}
 ExclusiveArch: %{ix86} x86_64 ppc ia64
@@ -68,7 +68,9 @@ entries containing function or method names.
 %setup -q -c -n eclipse-changelog-%{version}
 
 %build
-%{eclipse_base}/buildscripts/pdebuild -d cdt
+%{eclipse_base}/buildscripts/pdebuild -d cdt \
+-a "-DjavacSource=1.5 -DjavacTarget=1.5" \
+ -j -DJ2SE-1.5=%{_jvmdir}/java/jre/lib/rt.jar
 
 %install
 rm -rf $RPM_BUILD_ROOT
