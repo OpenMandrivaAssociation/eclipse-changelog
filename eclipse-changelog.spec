@@ -4,7 +4,7 @@ Epoch: 1
 %define eclipse_base    %{_libdir}/eclipse
 
 Name:           eclipse-changelog
-Version:        2.6.4
+Version:        2.6.6
 Release:        %mkrel 0.1.0
 Summary:        Eclipse ChangeLog plug-in
 
@@ -37,6 +37,8 @@ Provides:       eclipse-changelog-jdt = %{epoch}:%{version}-%{release}
 
 Source0:        http://sourceware.org/eclipse/changelog/%{name}-src-%{version}.zip
 
+Patch1:         eclipse-changelog-post-2.6.6.patch
+
 BuildRequires:          eclipse-pde >= 1:3.3.0
 BuildRequires:          eclipse-cdt >= 1:4.0.0
 BuildRequires:          eclipse-cvs-client >= 1:3.3.0
@@ -66,6 +68,9 @@ entries containing function or method names.
 
 %prep
 %setup -q -c -n eclipse-changelog-%{version}
+pushd org.eclipse.linuxtools.changelog.core
+%patch1
+popd
 
 %build
 %{eclipse_base}/buildscripts/pdebuild -d cdt \
