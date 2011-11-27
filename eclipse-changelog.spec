@@ -5,7 +5,7 @@ Epoch: 1
 
 Name:           eclipse-changelog
 Version:        2.7.0
-Release:        1
+Release:        3
 Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
