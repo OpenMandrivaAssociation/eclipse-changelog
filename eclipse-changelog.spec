@@ -10,7 +10,7 @@ Summary:        Eclipse ChangeLog plug-in
 
 Group:          Development/Java
 License:        EPL
-URL:            http://sources.redhat.com/eclipse
+URL:            https://sources.redhat.com/eclipse
 
 Obsoletes:      eclipse-changelog-cdt < 1:%{version}-%{release}
 Obsoletes:      eclipse-changelog-jdt < 1:%{version}-%{release}
